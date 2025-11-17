@@ -1,26 +1,27 @@
-# --- Step 1: Build React App ---
 FROM node:18-alpine AS build
 
 WORKDIR /app
 
 COPY package*.json ./
-
 RUN npm install
 
 COPY . .
-
 RUN npm run build
 
 
 
-# --- Step 2: Run with Nginx ---
-FROM nginx:alpine
+# --- Production Stage ---
+FROM node:18-alpine
 
-# Copy React build to Nginx html folder
-COPY --from=build /app/build /usr/share/nginx/html
+WORKDIR /app
 
-# Expose port 80
-EXPOSE 80
+# Install a lightweight static server
+RUN npm install -g serve
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Copy build from previous stage
+COPY --from=build /app/build ./build
+
+EXPOSE 3000
+
+# Serve production build
+CMD ["serve", "-s", "build", "-l", "3000"]
