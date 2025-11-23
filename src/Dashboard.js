@@ -56,7 +56,9 @@ function Dashboard() {
 
   const handleLogout = () => {
 
-    localStorage.clear(); // remove all localStorage items
+    localStorage.removeItem("User_ID");
+    localStorage.removeItem("User_Name");
+    localStorage.removeItem("isLoggedIn");
     navigate("/"); // redirect back to login
   };
 
@@ -105,6 +107,7 @@ function Dashboard() {
     console.log("Data store", localStorage.getItem("User_ID"));
     console.log("Data store", localStorage.getItem("User_Name"));
 
+    // Tossbook.getAllBats(body)
     axios
       .post("https://tossbook-api-1008064032232.asia-south1.run.app/api/v1/tossbook/getAllBats", body)
       .then((response) => {
@@ -115,6 +118,7 @@ function Dashboard() {
         setLoading(false);
 
 
+        // Tossbook.getwallet(body)
         axios
           .post("https://tossbook-api-1008064032232.asia-south1.run.app/api/v1/tossbook/wallet", bodyUser)
           .then((response) => {
@@ -217,6 +221,7 @@ function Dashboard() {
       console.log("🔹 Sending payload:", payload);
 
       const response = await fetch("https://tossbook-api-1008064032232.asia-south1.run.app/api/v1/tossbook/place_bet", {
+        // const response = await fetch("http://localhost:8080/api/v1/tossbook/place_bet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -634,8 +639,8 @@ function Dashboard() {
                           boxSizing: "border-box",
                         }}
                       >
-                       
-                       
+
+
 
                         <p>{wallet.map((item, index) => (
                           <li key={index}>
