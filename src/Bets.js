@@ -25,7 +25,8 @@ function Bets() {
     try {
       // ✅ Use POST to match your backend expectation
       const res = await axios.post(
-        "http://localhost:8080/api/v1/tossbook/getBetTransaction",
+        "https://tossbook-api-1008064032232.asia-south1.run.app/api/v1/tossbook/getBetTransaction",
+        // "https://tossbook-api-1008064032232.asia-south1.run.app/api/v1/tossbook/getBetTransaction",
         { user_name: localStorage.getItem("User_Name") },
         { headers: { "Content-Type": "application/json" } }
       );

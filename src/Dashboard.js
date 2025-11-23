@@ -7,7 +7,8 @@ import trophyImage from "./assets/images/trophy.png"; // your image path
 import calanderImage from "./assets/images/calander.png";
 import growthImage from "./assets/images/growth.png";
 import scheduleImage from "./assets/images/schedule.png";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 function Dashboard() {
@@ -42,6 +43,10 @@ function Dashboard() {
     setSelectedTeamID(id);
     setIsOpen(true);
   };
+
+  const clearText = () => {
+    setInputValue("")
+  }
 
   const closeDialog = () => {
     setIsOpen(false);
@@ -101,7 +106,7 @@ function Dashboard() {
     console.log("Data store", localStorage.getItem("User_Name"));
 
     axios
-      .post("http://localhost:8080/api/v1/tossbook/getAllBats", body)
+      .post("https://tossbook-api-1008064032232.asia-south1.run.app/api/v1/tossbook/getAllBats", body)
       .then((response) => {
         console.log("API Response:", response.data);
         console.log(localStorage.getItem("User_ID"));
@@ -111,7 +116,7 @@ function Dashboard() {
 
 
         axios
-          .post("http://localhost:8080/api/v1/tossbook/wallet", bodyUser)
+          .post("https://tossbook-api-1008064032232.asia-south1.run.app/api/v1/tossbook/wallet", bodyUser)
           .then((response) => {
             console.log("API Response: wallet ", response.data);
             setWallet(response.data?.data || []);
@@ -129,7 +134,7 @@ function Dashboard() {
         setError("Failed to load data");
         setLoading(false);
         axios
-          .post("http://localhost:8080/api/v1/tossbook/wallet", bodyUser)
+          .post("https://tossbook-api-1008064032232.asia-south1.run.app/api/v1/tossbook/wallet", bodyUser)
           .then((response) => {
             console.log("API Response:", response.data);
             setWallet(response.data?.data || []);
@@ -211,7 +216,7 @@ function Dashboard() {
 
       console.log("🔹 Sending payload:", payload);
 
-      const response = await fetch("http://localhost:8080/api/v1/tossbook/place_bet", {
+      const response = await fetch("https://tossbook-api-1008064032232.asia-south1.run.app/api/v1/tossbook/place_bet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -221,7 +226,13 @@ function Dashboard() {
       console.log("🔹 API Response:", data);
 
       if (response.ok) {
-        setMessage("✅ Bet placed successfully!");
+        setMessage("Bet placed successfully!");
+        toast.success("Bet placed successfully", {
+          position: "top-right",
+          autoClose: 2000,
+          theme: "colored",
+        });
+
 
         // 🟢 CLOSE DIALOG AFTER SHORT DELAY (for success message visibility)
         setTimeout(() => {
@@ -595,7 +606,11 @@ function Dashboard() {
                     </>
                   )}
 
+                  <ToastContainer position="top-right" autoClose={2000} theme="colored" />
+
                   {isOpen && (
+
+
                     <div
                       style={{
                         position: "fixed",
@@ -619,6 +634,8 @@ function Dashboard() {
                           boxSizing: "border-box",
                         }}
                       >
+                       
+                       
 
                         <p>{wallet.map((item, index) => (
                           <li key={index}>
@@ -826,7 +843,7 @@ function Dashboard() {
                           }
                         }>
                           <button
-                            onClick={closeDialog}
+                            onClick={clearText}
                             style={{
                               backgroundColor: "#e0e0e0ff",
                               marginTop: "10px",
@@ -899,6 +916,8 @@ function Dashboard() {
             No Data Available
           </div>
         )}
+
+        <ToastContainer />
 
         {isDialogOpen && selectedMatch && (
 
