@@ -109,7 +109,7 @@ function Dashboard() {
 
     // Tossbook.getAllBats(body)
     axios
-      .post("https://tossbook-api-1008064032232.asia-south1.run.app/api/v1/tossbook/getAllBats", body)
+      .post("https://api.sarktossbook.com/api/v1/tossbook/getAllBats", body)
       .then((response) => {
         console.log("API Response:", response.data);
         console.log(localStorage.getItem("User_ID"));
@@ -120,7 +120,7 @@ function Dashboard() {
 
         // Tossbook.getwallet(body)
         axios
-          .post("https://tossbook-api-1008064032232.asia-south1.run.app/api/v1/tossbook/wallet", bodyUser)
+          .post("https://api.sarktossbook.com/api/v1/tossbook/wallet", bodyUser)
           .then((response) => {
             console.log("API Response: wallet ", response.data);
             setWallet(response.data?.data || []);
@@ -138,7 +138,7 @@ function Dashboard() {
         setError("Failed to load data");
         setLoading(false);
         axios
-          .post("https://tossbook-api-1008064032232.asia-south1.run.app/api/v1/tossbook/wallet", bodyUser)
+          .post("https://api.sarktossbook.com/api/v1/tossbook/wallet", bodyUser)
           .then((response) => {
             console.log("API Response:", response.data);
             setWallet(response.data?.data || []);
@@ -220,8 +220,8 @@ function Dashboard() {
 
       console.log("🔹 Sending payload:", payload);
 
-      const response = await fetch("https://tossbook-api-1008064032232.asia-south1.run.app/api/v1/tossbook/place_bet", {
-        // const response = await fetch("http://localhost:8080/api/v1/tossbook/place_bet", {
+      const response = await fetch("https://api.sarktossbook.com/api/v1/tossbook/place_bet", {
+        // const response = await fetch("https://api.sarktossbook.com/api/v1/tossbook/place_bet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
