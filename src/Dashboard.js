@@ -400,7 +400,7 @@ function Dashboard() {
                     onClick={() => openDialogImage(match)} // 👈 open dialog with this match’s data
                   >
                     <img
-                      src={`http://localhost:8080${match.imageUrl}`}
+                      src={`https://api.sarktossbook.com${match.imageUrl}`}
                       alt="League Logo"
                       style={{
                         width: "45px",
@@ -526,14 +526,27 @@ function Dashboard() {
                     <span>
                       End Time:{" "}
                       <b>
-                        {match.betEndTime
-                          ? new Date(match.betEndTime).toLocaleString("en-IN", {
+                        {(() => {
+                          if (!match.betEndTime) return "N/A";
+
+                          // Auto detect user timezone (worldwide)
+                          const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                          // Convert UTC → User Local Time
+                          const localTime = new Date(match.betEndTime).toLocaleString("en-US", {
                             hour: "2-digit",
                             minute: "2-digit",
                             hour12: true,
-                            timeZone: "Asia/Kolkata", // convert UTC → IST
-                          })
-                          : "N/A"}
+                            timeZone: userTimeZone,
+                          });
+
+                          // Debug logs
+                          console.log("Original UTC:", match.betEndTime);
+                          console.log("User Timezone:", userTimeZone);
+                          console.log("Converted Local Time:", localTime);
+
+                          return localTime;
+                        })()}
                       </b>
                     </span>
                   </div>
@@ -958,7 +971,7 @@ function Dashboard() {
               onClick={(e) => e.stopPropagation()} // prevent close on inner click
             >
               <img
-                src={`http://localhost:8080${selectedMatch.imageUrl}`}
+                src={`https://api.sarktossbook.com${selectedMatch.imageUrl}`}
                 alt="League Preview"
                 style={{
                   width: "100%",
