@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import Bet from "./Bets";
+import Test from "./Test";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -36,6 +37,7 @@ function App() {
         }
       />
       <Route path="/bets" element={<Bet />} />
+      <Route path="/Test" element={<Test />} />
     </Routes>
   );
 }

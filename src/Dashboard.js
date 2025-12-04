@@ -310,6 +310,7 @@ function Dashboard() {
       <div style={{ display: "flex", margin: "20px", gap: "25px" }}>
         <Link to="/" style={linkStyle}>Home</Link>
         <Link to="/bets" style={linkStyle}>Bets</Link>
+        <Link to="/Test" style={linkStyle}>Test</Link>
       </div>
 
       <div

@@ -69,7 +69,7 @@ function Login({ onLogin }) {
 
     return (
         <div style={styles.container}>
-            <h1 style={{ color: "#333" }}>Sarkar Toss Book</h1>
+            <h1 style={{ color: "#333" }}>My Sarkar Toss Book</h1>
             <h2>Login Form</h2>
 
             <form onSubmit={handleSubmit} style={styles.form}>
