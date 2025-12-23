@@ -96,8 +96,6 @@ function Dashboard() {
 
     const body = {
       id: "",
-      isActive: "true", // use boolean instead of string if your backend expects boolean
-      isDelete: "", // same here
       user_name: localStorage.getItem("User_Name") // same here
     };
 
