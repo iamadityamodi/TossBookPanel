@@ -12,6 +12,8 @@ function Login({ onLogin }) {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+  
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -25,13 +27,13 @@ function Login({ onLogin }) {
         }
 
         try {
-            const response = await 
-            axios.post(
-                // "https://api.sarktossbook.com/api/v1/tossbook/login",
-                "https://api.sarktossbook.com/api/v1/tossbook/login",
-                formData,
-                { headers: { "Content-Type": "application/json" } }
-            );
+            const response = await
+                axios.post(
+                    // "https://api.sarktossbook.com/api/v1/tossbook/login",
+                    "https://api.sarktossbook.com/api/v1/tossbook/login",
+                    formData,
+                    { headers: { "Content-Type": "application/json" } }
+                );
 
             if (response.data.success) {
                 toast.success(response.data.message || "Login Successful!", {
@@ -69,7 +71,7 @@ function Login({ onLogin }) {
 
     return (
         <div style={styles.container}>
-            <h1 style={{ color: "#333" }}>My Sarkar Toss Book</h1>
+            <h1 style={{ color: "#333" }}>Sarkar Toss Book</h1>
             <h2>Login Form</h2>
 
             <form onSubmit={handleSubmit} style={styles.form}>

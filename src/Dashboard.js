@@ -255,6 +255,23 @@ function Dashboard() {
     }
   };
 
+  const formatDate = (utcString) => {
+    try {
+      const date = new Date(utcString);
+
+      if (isNaN(date)) return "Invalid Date";
+
+      const day = date.getDate().toString().padStart(2, "0");
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const year = date.getFullYear();
+
+      return `${day}-${month}-${year}`;
+    } catch {
+      return "Invalid Date";
+    }
+  };
+
+
   return (
     <div style={{
       textAlign: "left", padding: "15px"
@@ -365,26 +382,23 @@ function Dashboard() {
                   <span
                     style={{
                       display: "flex",
-                      alignItems: "center", // centers vertically
-                      gap: "6px",           // small space between icon & text
+                      alignItems: "center",
+                      gap: "6px",
                     }}
                   >
                     <img
-                      src={calanderImage}  // ✅ make sure imported correctly
+                      src={calanderImage}
                       alt="Calendar Icon"
                       style={{
                         width: "16px",
                         height: "16px",
                         objectFit: "contain",
-                        opacity: 0.7, // subtle gray tone
+                        opacity: 0.7,
                       }}
                     />
+
                     <span style={{ color: "#444", fontSize: "14px" }}>
-                      {match.betEndTime
-                        ? new Date(match.betEndTime)
-                          .toLocaleDateString("en-GB")
-                          .replace(/\//g, "-")
-                        : "N/A"}
+                      {match.betEndTime ? formatDate(match.betEndTime) : "N/A"}
                     </span>
                   </span>
 
@@ -1017,23 +1031,17 @@ const linkStyle = {
 
 
 function EndTimeCountdown({ betEndTime }) {
-  const [timeLeft, setTimeLeft] = useState("");
+    const [timeLeft, setTimeLeft] = useState("00:00:00");
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    if (!betEndTime) return;
+
+    const end = new Date(betEndTime); // Expect ISO string
+
+    const tick = () => {
       const now = new Date();
-
-      // Convert betEndTime UTC to Date object
-      const end = new Date(betEndTime);
-
-      // Calculate difference in milliseconds
-      const diff = end.getTime() - now.getTime();
-
-      if (diff <= 0) {
-        setTimeLeft("00:00:00");
-        clearInterval(interval);
-        return;
-      }
+      let diff = end.getTime() - now.getTime();
+      diff = Math.max(diff, 0); // Never negative
 
       const hours = Math.floor(diff / (1000 * 60 * 60));
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
@@ -1044,9 +1052,12 @@ function EndTimeCountdown({ betEndTime }) {
           .toString()
           .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
       );
-    }, 1000);
+    };
 
-    return () => clearInterval(interval);
+    tick(); // Initial call
+    const interval = setInterval(tick, 1000);
+
+    return () => clearInterval(interval); // Cleanup
   }, [betEndTime]);
 
   return <b>{timeLeft}</b>;
