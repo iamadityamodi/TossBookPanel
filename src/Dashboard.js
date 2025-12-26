@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 
 import { useNavigate, Link } from "react-router-dom";
 import logoutImage from "./assets/images/logout.png"; // adjust path
-import axios from "axios";
 import trophyImage from "./assets/images/trophy.png"; // your image path
 import calanderImage from "./assets/images/calander.png";
 import growthImage from "./assets/images/growth.png";
 import scheduleImage from "./assets/images/schedule.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import api from "./api";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -96,7 +95,8 @@ function Dashboard() {
 
     const body = {
       id: "",
-      user_name: localStorage.getItem("User_Name") // same here
+      user_name: localStorage.getItem("User_Name"),
+      isActive: true
     };
 
     const bodyUser = { user_id: localStorage.getItem("User_ID") }; // example body
@@ -106,8 +106,7 @@ function Dashboard() {
     console.log("Data store", localStorage.getItem("User_Name"));
 
     // Tossbook.getAllBats(body)
-    axios
-      .post("https://api.sarktossbook.com/api/v1/tossbook/getAllBats", body)
+    api.post("getAllBats", body)
       .then((response) => {
         console.log("API Response:", response.data);
         console.log(localStorage.getItem("User_ID"));
@@ -117,8 +116,7 @@ function Dashboard() {
 
 
         // Tossbook.getwallet(body)
-        axios
-          .post("https://api.sarktossbook.com/api/v1/tossbook/wallet", bodyUser)
+         api.post("wallet", bodyUser)
           .then((response) => {
             console.log("API Response: wallet ", response.data);
             setWallet(response.data?.data || []);
@@ -135,8 +133,8 @@ function Dashboard() {
         console.error("Error fetching bats:", err.response || err);
         setError("Failed to load data");
         setLoading(false);
-        axios
-          .post("https://api.sarktossbook.com/api/v1/tossbook/wallet", bodyUser)
+
+        api.post("wallet", bodyUser)
           .then((response) => {
             console.log("API Response:", response.data);
             setWallet(response.data?.data || []);
@@ -218,6 +216,8 @@ function Dashboard() {
 
       console.log("🔹 Sending payload:", payload);
 
+
+ 
       const response = await fetch("https://api.sarktossbook.com/api/v1/tossbook/place_bet", {
         // const response = await fetch("https://api.sarktossbook.com/api/v1/tossbook/place_bet", {
         method: "POST",

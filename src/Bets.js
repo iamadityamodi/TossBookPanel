@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { format } from "date-fns";
-
+import api from "./api";
 
 function Bets() {
   const [bets, setBets] = useState([]);
@@ -24,12 +23,8 @@ function Bets() {
   const fetchBets = async () => {
     try {
       // ✅ Use POST to match your backend expectation
-      const res = await axios.post(
-        "https://api.sarktossbook.com/api/v1/tossbook/getBetTransaction",
-        // "https://api.sarktossbook.com/api/v1/tossbook/getBetTransaction",
-        { user_name: localStorage.getItem("User_Name") },
-        { headers: { "Content-Type": "application/json" } }
-      );
+
+      const res = await api.post("getBetTransaction", { user_name: localStorage.getItem("User_Name") });
 
       if (res.data.success) {
         console.log("User ID if ", localStorage.getItem("User_Name"));

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+import api from "./api";
 
 function Login({ onLogin }) {
     const [formData, setFormData] = useState({ username: "", password: "" });
@@ -27,13 +27,7 @@ function Login({ onLogin }) {
         }
 
         try {
-            const response = await
-                axios.post(
-                    // "https://api.sarktossbook.com/api/v1/tossbook/login",
-                    "https://api.sarktossbook.com/api/v1/tossbook/login",
-                    formData,
-                    { headers: { "Content-Type": "application/json" } }
-                );
+            const response = await api.post("login", formData);
 
             if (response.data.success) {
                 toast.success(response.data.message || "Login Successful!", {
