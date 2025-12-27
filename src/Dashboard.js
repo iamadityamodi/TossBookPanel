@@ -223,8 +223,7 @@ function Dashboard() {
 
 
 
-      const response = await fetch("http://10.96.136.2:8080/api/v1/tossbook/place_bet", {
-        // const response = await fetch("http://10.96.136.2:8080/api/v1/tossbook/place_bet", {
+      const response = await fetch("https://api.sarktossbook.com/api/v1/tossbook/place_bet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -418,7 +417,7 @@ function Dashboard() {
                     onClick={() => openDialogImage(match)} // 👈 open dialog with this match’s data
                   >
                     <img
-                      src={`http://10.96.136.2:8080${match.imageUrl}`}
+                      src={`https://api.sarktossbook.com${match.imageUrl}`}
                       alt="League Logo"
                       style={{
                         width: "45px",
@@ -989,7 +988,7 @@ function Dashboard() {
               onClick={(e) => e.stopPropagation()} // prevent close on inner click
             >
               <img
-                src={`http://10.96.136.2:8080${selectedMatch.imageUrl}`}
+                src={`https://api.sarktossbook.com${selectedMatch.imageUrl}`}
                 alt="League Preview"
                 style={{
                   width: "100%",
