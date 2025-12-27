@@ -70,6 +70,8 @@ function Dashboard() {
   const [message, setMessage] = useState("");
 
 
+
+
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (!isLoggedIn) {
@@ -80,6 +82,8 @@ function Dashboard() {
 
   // Fetch data from API
   useEffect(() => {
+
+
 
     const userId = localStorage.getItem("User_ID");
     const userName = localStorage.getItem("User_Name");
@@ -96,7 +100,8 @@ function Dashboard() {
     const body = {
       id: "",
       user_name: localStorage.getItem("User_Name"),
-      isActive: true
+      isActive: true,
+      userZone: Intl.DateTimeFormat().resolvedOptions().timeZone
     };
 
     const bodyUser = { user_id: localStorage.getItem("User_ID") }; // example body
@@ -116,7 +121,7 @@ function Dashboard() {
 
 
         // Tossbook.getwallet(body)
-         api.post("wallet", bodyUser)
+        api.post("wallet", bodyUser)
           .then((response) => {
             console.log("API Response: wallet ", response.data);
             setWallet(response.data?.data || []);
@@ -217,9 +222,9 @@ function Dashboard() {
       console.log("🔹 Sending payload:", payload);
 
 
- 
-      const response = await fetch("https://api.sarktossbook.com/api/v1/tossbook/place_bet", {
-        // const response = await fetch("https://api.sarktossbook.com/api/v1/tossbook/place_bet", {
+
+      const response = await fetch("http://10.96.136.2:8080/api/v1/tossbook/place_bet", {
+        // const response = await fetch("http://10.96.136.2:8080/api/v1/tossbook/place_bet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -413,7 +418,7 @@ function Dashboard() {
                     onClick={() => openDialogImage(match)} // 👈 open dialog with this match’s data
                   >
                     <img
-                      src={`https://api.sarktossbook.com${match.imageUrl}`}
+                      src={`http://10.96.136.2:8080${match.imageUrl}`}
                       alt="League Logo"
                       style={{
                         width: "45px",
@@ -984,7 +989,7 @@ function Dashboard() {
               onClick={(e) => e.stopPropagation()} // prevent close on inner click
             >
               <img
-                src={`https://api.sarktossbook.com${selectedMatch.imageUrl}`}
+                src={`http://10.96.136.2:8080${selectedMatch.imageUrl}`}
                 alt="League Preview"
                 style={{
                   width: "100%",
@@ -1029,7 +1034,7 @@ const linkStyle = {
 
 
 function EndTimeCountdown({ betEndTime }) {
-    const [timeLeft, setTimeLeft] = useState("00:00:00");
+  const [timeLeft, setTimeLeft] = useState("00:00:00");
 
   useEffect(() => {
     if (!betEndTime) return;
