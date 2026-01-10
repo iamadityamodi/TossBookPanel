@@ -332,10 +332,10 @@ const Dashboard = ({ onLogout }) => {
       </div>
 
       <div style={{ display: "flex", margin: "20px", gap: "25px" }}>
-        <Link to="/AddUser" style={linkStyle}>Add User</Link>
+        {/* <Link to="/AddUser" style={linkStyle}>Add User</Link> */}
         <Link to="/" style={linkStyle}>Home</Link>
         <Link to="/bets" style={linkStyle}>Bets</Link>
-        <Link to="/Test" style={linkStyle}>Test</Link>
+        {/* <Link to="/Test" style={linkStyle}>Test</Link> */}
       </div>
 
       <div
