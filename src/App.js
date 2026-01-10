@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import Bet from "./Bets";
+import AddUser from "./AddUser";
 import Test from "./Test";
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
+    localStorage.clear(); // clear everything related to auth
     setIsLoggedIn(false);
   };
 
@@ -36,6 +37,7 @@ function App() {
           isLoggedIn ? <Dashboard onLogout={handleLogout} /> : <Navigate to="/" replace />
         }
       />
+      <Route path="/AddUser" element={<AddUser />} />
       <Route path="/bets" element={<Bet />} />
       <Route path="/Test" element={<Test />} />
     </Routes>

@@ -9,8 +9,10 @@ import scheduleImage from "./assets/images/schedule.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api from "./api";
+import { IMAGE_BASE_URL } from "./api";
+import { API_BASE_URL } from "./api";
 
-function Dashboard() {
+const Dashboard = ({ onLogout }) => {
   const navigate = useNavigate();
 
 
@@ -55,10 +57,8 @@ function Dashboard() {
 
   const handleLogout = () => {
 
-    localStorage.removeItem("User_ID");
-    localStorage.removeItem("User_Name");
-    localStorage.removeItem("isLoggedIn");
-    navigate("/"); // redirect back to login
+    onLogout();        // 🔴 updates App state
+    navigate("/", { replace: true });
   };
 
 
@@ -104,9 +104,12 @@ function Dashboard() {
       userZone: Intl.DateTimeFormat().resolvedOptions().timeZone
     };
 
+
+
     const bodyUser = { user_id: localStorage.getItem("User_ID") }; // example body
 
 
+    console.log("Data store", Intl.DateTimeFormat().resolvedOptions().timeZone);
     console.log("Data store", localStorage.getItem("User_ID"));
     console.log("Data store", localStorage.getItem("User_Name"));
 
@@ -223,7 +226,9 @@ function Dashboard() {
 
 
 
-      const response = await fetch("https://api.sarktossbook.com/api/v1/tossbook/place_bet", {
+
+      const response = await fetch(
+        `${API_BASE_URL}/api/v1/tossbook/place_bet`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -327,6 +332,7 @@ function Dashboard() {
       </div>
 
       <div style={{ display: "flex", margin: "20px", gap: "25px" }}>
+        <Link to="/AddUser" style={linkStyle}>Add User</Link>
         <Link to="/" style={linkStyle}>Home</Link>
         <Link to="/bets" style={linkStyle}>Bets</Link>
         <Link to="/Test" style={linkStyle}>Test</Link>
@@ -417,7 +423,7 @@ function Dashboard() {
                     onClick={() => openDialogImage(match)} // 👈 open dialog with this match’s data
                   >
                     <img
-                      src={`https://api.sarktossbook.com${match.imageUrl}`}
+                      src={`${IMAGE_BASE_URL}${match.imageUrl}`}
                       alt="League Logo"
                       style={{
                         width: "45px",
@@ -988,7 +994,8 @@ function Dashboard() {
               onClick={(e) => e.stopPropagation()} // prevent close on inner click
             >
               <img
-                src={`https://api.sarktossbook.com${selectedMatch.imageUrl}`}
+                src={`${IMAGE_BASE_URL}${selectedMatch.imageUrl}`}
+
                 alt="League Preview"
                 style={{
                   width: "100%",
