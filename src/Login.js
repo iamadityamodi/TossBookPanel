@@ -12,7 +12,7 @@ function Login({ onLogin }) {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-  
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -43,6 +43,7 @@ function Login({ onLogin }) {
                     localStorage.setItem("User_ID", response.data.data.user_id);
                     localStorage.setItem("User_Name", response.data.data.user_name);
                     localStorage.setItem("Full_Name", response.data.data.fullname);
+                    localStorage.setItem("Login_type_name", response.data.data.login_type_name);
 
                     onLogin(); // ✅ call after saving
                     navigate("/dashboard");
@@ -88,7 +89,7 @@ function Login({ onLogin }) {
                 <button type="submit" style={styles.button}>
                     Login
                 </button>
-                
+
             </form>
 
             <ToastContainer />

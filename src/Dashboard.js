@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { useNavigate, Link } from "react-router-dom";
 import logoutImage from "./assets/images/logout.png"; // adjust path
@@ -40,6 +40,8 @@ const Dashboard = ({ onLogout }) => {
 
 
   const openDialog = (teamName, id) => {
+    console.log("teamName", teamName);
+
     setSelectedTeam(teamName);
     setSelectedTeamID(id);
     setIsOpen(true);
@@ -68,7 +70,7 @@ const Dashboard = ({ onLogout }) => {
   const [error, setError] = useState(null);
   const [inputValue, setInputValue] = useState(""); // state for input
   const [message, setMessage] = useState("");
-
+  const hasFetched = useRef(false);
 
 
 
@@ -83,11 +85,13 @@ const Dashboard = ({ onLogout }) => {
   // Fetch data from API
   useEffect(() => {
 
-
+    if (hasFetched.current) return; // 🔥 stop second call
+    hasFetched.current = true;
 
     const userId = localStorage.getItem("User_ID");
     const userName = localStorage.getItem("User_Name");
     const isLoggedIn = localStorage.getItem("isLoggedIn");
+    // const Login_type_name = localStorage.getItem("Login_type_name");
 
     if (!isLoggedIn || !userId || !userName) {
       console.warn("Skipping API calls — user not logged in");
@@ -122,7 +126,6 @@ const Dashboard = ({ onLogout }) => {
         setBats(response.data?.data || []);
         setLoading(false);
 
-
         // Tossbook.getwallet(body)
         api.post("wallet", bodyUser)
           .then((response) => {
@@ -141,18 +144,6 @@ const Dashboard = ({ onLogout }) => {
         console.error("Error fetching bats:", err.response || err);
         setError("Failed to load data");
         setLoading(false);
-
-        api.post("wallet", bodyUser)
-          .then((response) => {
-            console.log("API Response:", response.data);
-            setWallet(response.data?.data || []);
-            setLoading(false);
-          })
-          .catch((err) => {
-            console.error("Error fetching bats:", err.response || err);
-            setError("Failed to load data");
-            setLoading(false);
-          });
       });
 
 
@@ -262,6 +253,64 @@ const Dashboard = ({ onLogout }) => {
     }
   };
 
+  const handleCancelledBet = async (betId) => {
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const userName = localStorage.getItem("User_Name");
+
+
+      console.log("✅ betId:", betId);
+      console.log("✅ userName:", userName);
+
+
+      if (!betId || !userName) {
+        toast.error("Bet ID or user missing");
+        return;
+      }
+
+
+      const payload = {
+        user_name: userName, // must match backend
+        betId: betId
+      };
+
+
+      console.log("🔹 Payload:", payload);
+
+      const response = await fetch(
+        `${API_BASE_URL}/api/v1/tossbook/closeBetTransaction`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+      console.log("🔹 API Response:", data);
+
+      if (response.ok) {
+        setMessage("Bet cancelled successfully!");
+        toast.success("Bet cancelled successfully", {
+          position: "top-right",
+          autoClose: 2000,
+          theme: "colored",
+        });
+
+        setTimeout(() => {
+          handleRefresh();
+        }, 300);
+      } else {
+        setMessage(`❌ Failed: ${data.message || "Something went wrong"}`);
+      }
+    } catch (error) {
+      console.error("Error placing bet:", error);
+      setMessage("⚠️ Network or server error!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const formatDate = (utcString) => {
     try {
       const date = new Date(utcString);
@@ -280,6 +329,8 @@ const Dashboard = ({ onLogout }) => {
 
 
   return (
+
+
     <div style={{
       textAlign: "left", padding: "15px"
 
@@ -331,10 +382,16 @@ const Dashboard = ({ onLogout }) => {
         }}></img>
       </div>
 
+
+
       <div style={{ display: "flex", margin: "20px", gap: "25px" }}>
         {/* <Link to="/AddUser" style={linkStyle}>Add User</Link> */}
         <Link to="/" style={linkStyle}>Home</Link>
         <Link to="/bets" style={linkStyle}>Bets</Link>
+        {/* <Link to="/Bethistory" style={linkStyle}>Pasbook</Link> */}
+        {localStorage.getItem("Login_type_name") === "Admin" && (
+          <Link to="/CreateBat" style={linkStyle}>Create Bat</Link>
+        )}
         {/* <Link to="/Test" style={linkStyle}>Test</Link> */}
       </div>
 
@@ -643,15 +700,42 @@ const Dashboard = ({ onLogout }) => {
                     </>
                   ) : (
                     <>
+                      <button
+                        onClick={() => openDialog(match.userBetTeam, match.id)}
+                        style={{
+                          backgroundColor: "#3b1ce6ff",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "8px",
+                          padding: "10px 20px",
+                          marginBottom: "10px",
+                          width: "100%",
+                        }}
+                      >
+                        Bet More
+                      </button>
 
+                      <button
+                        onClick={() => handleCancelledBet(match.id)}
+                        style={{
+                          backgroundColor: "white",
+                          color: "#3b1ce6",
+                          border: "2px solid #3b1ce6",   // ✅ stroke color + width
+                          borderRadius: "8px",
+                          padding: "10px 20px",
+                          width: "100%",
+                          fontWeight: "600",
+                          cursor: "pointer"
+                        }}
+                      >
+                        Cancel Bet
+                      </button>
                     </>
                   )}
 
                   <ToastContainer position="top-right" autoClose={2000} theme="colored" />
 
                   {isOpen && (
-
-
                     <div
                       style={{
                         position: "fixed",

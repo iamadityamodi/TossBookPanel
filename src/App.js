@@ -5,7 +5,11 @@ import Dashboard from "./Dashboard";
 import Bet from "./Bets";
 import AddUser from "./AddUser";
 import Test from "./Test";
+import BetHistory from "./BetHistory";
+import CreateBat from "./CreateBat";
 
+
+ 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") === "true"
@@ -40,6 +44,8 @@ function App() {
       <Route path="/AddUser" element={<AddUser />} />
       <Route path="/bets" element={<Bet />} />
       <Route path="/Test" element={<Test />} />
+      <Route path="/Bethistory" element={<BetHistory />} />
+      <Route path="/CreateBat" element={<CreateBat />} />
     </Routes>
   );
 }

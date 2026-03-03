@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import api from "./api";
 
@@ -6,6 +6,7 @@ function Bets() {
   const [bets, setBets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
+  const hasFetched = useRef(false);
 
 
   const calculateTotal = (amount, rate) => {
@@ -17,6 +18,8 @@ function Bets() {
 
 
   useEffect(() => {
+    if (hasFetched.current) return; // 🔥 stop second call
+    hasFetched.current = true;
     fetchBets();
   }, []);
 
@@ -129,7 +132,7 @@ function Bets() {
               </div>
             </div>
 
-        
+
             {/* League */}
             <div
               style={{

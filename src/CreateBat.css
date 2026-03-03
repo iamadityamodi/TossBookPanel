@@ -1,0 +1,93 @@
+.form-container {
+  padding: 10px;
+  background: #f5f6fa;
+  min-height: 100vh;
+  box-sizing: border-box;   /* 👈 add this */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+
+html, body {
+  overflow-x: hidden;
+}
+
+.card {
+  background: white;
+  padding: 30px;
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* Full width element */
+.full-width {
+  grid-column: span 3;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="datetime-local"],
+input[type="file"] {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.radio-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 5px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.btn {
+  margin-top: 25px;
+  padding: 12px;
+  width: 100%;
+  background: #4c6ef5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* 🔥 Responsive Part */
+@media (max-width: 768px) {
+  .grid-3 {
+    grid-template-columns: 1fr;  /* Mobile = 1 column */
+  }
+
+  .full-width {
+    grid-column: span 1;
+  }
+
+  .card {
+    padding: 20px;
+  }
+}
