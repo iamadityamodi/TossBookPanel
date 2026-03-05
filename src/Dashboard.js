@@ -150,7 +150,14 @@ const Dashboard = ({ onLogout }) => {
   }, []);
 
   // Render UI
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="overlay">
+        <div className="circle-loader"></div>
+      </div>
+    );
+  }
+
   if (error)
     return (
       <div style={{ textAlign: "center", marginTop: 40, color: "red" }}>
@@ -490,7 +497,6 @@ const Dashboard = ({ onLogout }) => {
                       }}
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = "/default-logo.png";
                       }}
                     />
                   </div>
@@ -1079,7 +1085,6 @@ const Dashboard = ({ onLogout }) => {
             >
               <img
                 src={`${IMAGE_BASE_URL}${selectedMatch.imageUrl}`}
-
                 alt="League Preview"
                 style={{
                   width: "100%",
@@ -1091,9 +1096,8 @@ const Dashboard = ({ onLogout }) => {
                 }}
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "/default-logo.png";
                 }}
-              />
+              />  
             </div>
           </div>
         )}

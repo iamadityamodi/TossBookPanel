@@ -64,12 +64,57 @@ function Login({ onLogin }) {
         }
     };
 
+    const demohandleSubmit = async (e) => {
+        e.preventDefault();
+
+        const loginData = {
+            username: "demo",
+            password: "demo"
+        };
+
+        try {
+            const response = await api.post("login", loginData);
+
+            if (response.data.success) {
+                toast.success(response.data.message || "Login Successful!", {
+                    position: "top-right",
+                    autoClose: 2000,
+                    theme: "colored",
+                });
+
+                setTimeout(() => {
+                    console.log("Redirecting to dashboard...");
+
+                    localStorage.setItem("isLoggedIn", "true"); // ✅ as string
+                    localStorage.setItem("User_ID", response.data.data.user_id);
+                    localStorage.setItem("User_Name", response.data.data.user_name);
+                    localStorage.setItem("Full_Name", response.data.data.fullname);
+                    localStorage.setItem("Login_type_name", response.data.data.login_type_name);
+
+                    onLogin(); // ✅ call after saving
+                    navigate("/dashboard");
+                }, 500);
+            } else {
+                toast.error(response.data.message || "Invalid login details", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    theme: "colored",
+                });
+            }
+        } catch (error) {
+            toast.error("Server Error! Please try again.", {
+                position: "top-right",
+                autoClose: 3000,
+                theme: "colored",
+            });
+        }
+    };
+
     return (
         <div style={styles.container}>
-            <h1 style={{ color: "#333" }}>My Sarkar Toss Book</h1>
-            <h2>Login Form</h2>
+            <h1 style={{ color: "#333" }}>Sarkar Toss Book</h1>
 
-            <form onSubmit={handleSubmit} style={styles.form}>
+            <form style={styles.form}>
                 <input
                     type="text"
                     name="username"
@@ -86,8 +131,11 @@ function Login({ onLogin }) {
                     onChange={handleChange}
                     style={styles.input}
                 />
-                <button type="submit" style={styles.button}>
+                <button type="submit" onClick={handleSubmit} style={styles.button}>
                     Login
+                </button>
+                <button type="submit" onClick={demohandleSubmit} style={styles.demobutton}>
+                    Demo Login
                 </button>
 
             </form>
@@ -125,6 +173,15 @@ const styles = {
         backgroundColor: "#007bff",
         color: "white",
         border: "none",
+        borderRadius: "5px",
+        cursor: "pointer",
+    },
+    demobutton: {
+        padding: "10px",
+        fontSize: "16px",
+        backgroundColor: "white",   // background white
+        color: "#007bff",           // text blue
+        border: "2px solid #007bff", // blue stroke (border)
         borderRadius: "5px",
         cursor: "pointer",
     },
