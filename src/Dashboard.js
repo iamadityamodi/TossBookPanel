@@ -29,9 +29,9 @@ const Dashboard = ({ onLogout }) => {
 
 
   // const handleEdit = (id) => {
-  //  navigate("/CreateBat", {
-  //   state: { id: id }
-  // });
+  //   navigate("/CreateBat", {
+  //     state: { id: id }
+  //   });
   // };
 
 
@@ -268,63 +268,63 @@ const Dashboard = ({ onLogout }) => {
     }
   };
 
-  // const handleCancelledBet = async (betId) => {
-  //   setLoading(true);
-  //   setMessage("");
+  const handleCancelledBet = async (betId) => {
+    setLoading(true);
+    setMessage("");
 
-  //   try {
-  //     const userName = localStorage.getItem("User_Name");
-
-
-  //     console.log("✅ betId:", betId);
-  //     console.log("✅ userName:", userName);
+    try {
+      const userName = localStorage.getItem("User_Name");
 
 
-  //     if (!betId || !userName) {
-  //       toast.error("Bet ID or user missing");
-  //       return;
-  //     }
+      console.log("✅ betId:", betId);
+      console.log("✅ userName:", userName);
 
 
-  //     const payload = {
-  //       user_name: userName, // must match backend
-  //       betId: betId
-  //     };
+      if (!betId || !userName) {
+        toast.error("Bet ID or user missing");
+        return;
+      }
 
 
-  //     console.log("🔹 Payload:", payload);
+      const payload = {
+        user_name: userName, // must match backend
+        betId: betId
+      };
 
-  //     const response = await fetch(
-  //       `${API_BASE_URL}/api/v1/tossbook/closeBetTransaction`, {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(payload),
-  //     });
 
-  //     const data = await response.json();
-  //     console.log("🔹 API Response:", data);
+      console.log("🔹 Payload:", payload);
 
-  //     if (response.ok) {
-  //       setMessage("Bet cancelled successfully!");
-  //       toast.success("Bet cancelled successfully", {
-  //         position: "top-right",
-  //         autoClose: 2000,
-  //         theme: "colored",
-  //       });
+      const response = await fetch(
+        `${API_BASE_URL}/api/v1/tossbook/closeBetTransaction`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-  //       setTimeout(() => {
-  //         handleRefresh();
-  //       }, 300);
-  //     } else {
-  //       setMessage(`❌ Failed: ${data.message || "Something went wrong"}`);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error placing bet:", error);
-  //     setMessage("⚠️ Network or server error!");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      const data = await response.json();
+      console.log("🔹 API Response:", data);
+
+      if (response.ok) {
+        setMessage("Bet cancelled successfully!");
+        toast.success("Bet cancelled successfully", {
+          position: "top-right",
+          autoClose: 2000,
+          theme: "colored",
+        });
+
+        setTimeout(() => {
+          handleRefresh();
+        }, 300);
+      } else {
+        setMessage(`❌ Failed: ${data.message || "Something went wrong"}`);
+      }
+    } catch (error) {
+      console.error("Error placing bet:", error);
+      setMessage("⚠️ Network or server error!");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const formatDate = (utcString) => {
     try {
@@ -731,7 +731,7 @@ const Dashboard = ({ onLogout }) => {
                     </>
                   ) : (
                     <>
-                      {/* <button
+                      <button
                         onClick={() => openDialog(match.userBetTeam, match.id)}
                         style={{
                           backgroundColor: "#3b1ce6ff",
@@ -760,7 +760,7 @@ const Dashboard = ({ onLogout }) => {
                         }}
                       >
                         Cancel Bet
-                      </button> */}
+                      </button>
                     </>
                   )}
 
