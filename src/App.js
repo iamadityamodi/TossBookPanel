@@ -7,6 +7,7 @@ import AddUser from "./AddUser";
 import Test from "./Test";
 import BetHistory from "./BetHistory";
 import CreateBat from "./CreateBat";
+import CreateUser from "./CreateUser";
 
 
  
@@ -46,6 +47,7 @@ function App() {
       <Route path="/Test" element={<Test />} />
       <Route path="/Bethistory" element={<BetHistory />} />
       <Route path="/CreateBat" element={<CreateBat />} />
+      <Route path="/CreateUser" element={<CreateUser />} />
     </Routes>
   );
 }

@@ -1,8 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import "./CreateBat.css";
 import api from "./api";
 
 const CreateBat = () => {
+
+
+  const location = useLocation();
+
+  const editId = location.state?.id;
+
+  console.log("Received ID:", editId);
+
   // const [name, setName] = useState("");
   const [formData, setFormData] = useState({
     teamName: "",
@@ -74,6 +83,7 @@ const CreateBat = () => {
 
       const data = new FormData();
 
+      data.append("id", editId);
       data.append("teamAName", formData.teamA);
       data.append("teamBName", formData.teamB);
       data.append("leagueName", formData.teamName);
@@ -116,6 +126,52 @@ const CreateBat = () => {
       alert("Server Error ❌");
     }
   };
+
+  // 🔥 GET DATA FROM API
+  useEffect(() => {
+
+    if (!editId) return;
+
+    const getData = async () => {
+      try {
+
+        const body = {
+          id: editId,
+          user_name: "",
+          isActive: "true",
+          userZone: ""
+        };
+
+        const res = await api.post("getAllBats", body);
+
+        console.log("API Data:", res.data);
+
+        if (res.data.data && res.data.data.length > 0) {
+
+          const bet = res.data.data[0]; // first record
+
+          setFormData({
+            teamName: bet.leagueName || "",
+            teamA: bet.teamAName || "",
+            teamB: bet.teamBName || "",
+            type: bet.sportType || "",
+            dateTime: bet.betEndTime
+              ? bet.betEndTime.replace(" ", "T").slice(0, 16)
+              : "",
+            tossRate: bet.tossRate || "",
+            image: bet.imageUrl
+            
+          });
+
+        }
+
+      } catch (error) {
+        console.error("Fetch Error:", error);
+      }
+    };
+
+    getData();
+  }, [editId]);
 
   return (
     <div className="form-container">
