@@ -9,7 +9,6 @@ import scheduleImage from "./assets/images/schedule.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api from "./api";
-import { IMAGE_BASE_URL } from "./api";
 import { API_BASE_URL } from "./api";
 
 const Dashboard = ({ onLogout }) => {
@@ -28,11 +27,11 @@ const Dashboard = ({ onLogout }) => {
 
 
 
-  // const handleEdit = (id) => {
-  //   navigate("/CreateBat", {
-  //     state: { id: id }
-  //   });
-  // };
+  const handleEdit = (id) => {
+    navigate("/CreateBat", {
+      state: { id: id }
+    });
+  };
 
 
 
@@ -383,6 +382,7 @@ const Dashboard = ({ onLogout }) => {
             >
               <p><strong></strong> {localStorage.getItem("User_Name")}</p>
               <p><strong>Balance:</strong> {item.tblWalletcol}</p>
+              <p><strong>Bonus:</strong> {item.bonus}</p>
               <p><strong>Exposure:</strong> {item.exposure}</p>
             </div>
           ))}
@@ -404,7 +404,7 @@ const Dashboard = ({ onLogout }) => {
         <Link to="/" style={linkStyle}>Home</Link>
         <Link to="/bets" style={linkStyle}>Bets</Link>
         {/* <Link to="/createuser" style={linkStyle}>Create User</Link> */}
-        {/* <Link to="/Bethistory" style={linkStyle}>Pasbook</Link> */}
+        <Link to="/Bethistory" style={linkStyle}>Pasbook</Link>
         {localStorage.getItem("Login_type_name") === "Admin" && (
           <Link to="/CreateBat" style={linkStyle}>Create Bat</Link>
         )}
@@ -496,7 +496,7 @@ const Dashboard = ({ onLogout }) => {
                     onClick={() => openDialogImage(match)} // 👈 open dialog with this match’s data
                   >
                     <img
-                      src={`${IMAGE_BASE_URL}${match.imageUrl}`}
+                      src={match.imageUrl}
                       alt="League Logo"
                       style={{
                         width: "45px",
@@ -713,20 +713,27 @@ const Dashboard = ({ onLogout }) => {
                         BET ON {match.teamBName}
                       </button>
 
-                      {/* <button
-                        onClick={() => handleEdit(match.id)}
-                        style={{
-                          backgroundColor: "#3b1ce6ff",
-                          color: "white",
-                          border: "none",
-                          marginTop: "10px",
-                          borderRadius: "8px",
-                          padding: "10px 20px",
-                          width: "100%",
-                        }}
-                      >
-                        EDIT
-                      </button> */}
+                      {localStorage.getItem("Login_type_name") === "Admin" && (
+                        <button
+                          onClick={() => handleEdit(match.id)}
+                          style={{
+                            backgroundColor: "rgb(255, 255, 255)",
+                            border: "2px solid #3b1ce6ff",
+                            color: "#3b1ce6ff",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                            marginTop: "10px",
+                            
+                            padding: "10px 20px",
+                            width: "100%",
+                          }}
+                        >
+                          EDIT BET
+                        </button>
+                      )}
+
+
 
                     </>
                   ) : (
@@ -1109,7 +1116,8 @@ const Dashboard = ({ onLogout }) => {
               onClick={(e) => e.stopPropagation()} // prevent close on inner click
             >
               <img
-                src={`${IMAGE_BASE_URL}${selectedMatch.imageUrl}`}
+                // src={`${IMAGE_BASE_URL}${selectedMatch.imageUrl}`}
+                src={selectedMatch.imageUrl}
                 alt="League Preview"
                 style={{
                   width: "100%",

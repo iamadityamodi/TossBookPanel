@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./CreateBat.css";
 import api from "./api";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreateBat = () => {
 
+  const navigate = useNavigate();
+
+  const [imageName, setImageName] = useState("");
 
   const location = useLocation();
 
@@ -81,6 +86,9 @@ const CreateBat = () => {
       const formattedDate =
         formData.dateTime.replace("T", " ") + ":00";
 
+      console.log("formattedDate " + formattedDate + " " + formData.dateTime);
+
+
       const data = new FormData();
 
       data.append("id", editId);
@@ -98,12 +106,25 @@ const CreateBat = () => {
         data.append("image", formData.image);
       }
 
+      console.log("data : " + data);
+
+
       const res = await api.post("InsertBets", data);
 
       console.log("API Response:", res.data);
 
       if (res.data.success) {
-        alert("Data Submitted Successfully ✅");
+
+        // alert(res.data.message);
+        toast.success(res.data.message, {
+          position: "top-right",
+          autoClose: 2000,
+          theme: "colored",
+        });
+
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
 
         // 🔥 Reset form after success
         setFormData({
@@ -150,18 +171,44 @@ const CreateBat = () => {
 
           const bet = res.data.data[0]; // first record
 
+
+          // console.log(bet.leagueName);
+          // console.log(bet.teamAName);
+          // console.log(bet.teamBName);
+          // console.log(bet.sportType);
+          // console.log(bet.sportType);
+          // const localTime = bet.betEndTime
+          //   ? new Date(bet.betEndTime).toLocaleString().slice(0, 16)
+          //   : "";
+          // console.log(localTime);
+          // console.log(bet.sportType);
+          // console.log(bet.imageUrl);
+
+
+
+          // const BetEndTime = new Date(bet.betEndTime.replace(" ", "T"))
+          //   .toISOString()
+          //   .slice(0, 16);
+
+          const BetEndTime = convertToLocal(bet.betEndTime);
+
+          console.log("bet.betEndTime", bet.betEndTime + " " + BetEndTime);
+
+
+
           setFormData({
             teamName: bet.leagueName || "",
             teamA: bet.teamAName || "",
             teamB: bet.teamBName || "",
             type: bet.sportType || "",
-            dateTime: bet.betEndTime
-              ? bet.betEndTime.replace(" ", "T").slice(0, 16)
-              : "",
+            dateTime: BetEndTime,
             tossRate: bet.tossRate || "",
             image: bet.imageUrl
-            
+
           });
+
+          setImageName(bet.imageUrl.split("-"));
+
 
         }
 
@@ -181,25 +228,25 @@ const CreateBat = () => {
         <div className="grid-3">
 
           <div className="form-group">
-            <label>Team Name *</label>
+            <label>Team Name <span className="required">*</span></label>
             <input type="text" autoComplete="off" name="teamName" value={formData.teamName} onChange={handleChange} />
             {errors.teamName && <p className="error">{errors.teamName}</p>}
           </div>
 
           <div className="form-group">
-            <label>Team Name A *</label>
+            <label>Team Name A <span className="required">*</span></label>
             <input type="text" autoComplete="off" name="teamA" value={formData.teamA} onChange={handleChange} />
             {errors.teamA && <p className="error">{errors.teamA}</p>}
           </div>
 
           <div className="form-group">
-            <label>Team Name B *</label>
+            <label>Team Name B <span className="required">*</span></label>
             <input type="text" autoComplete="off" name="teamB" value={formData.teamB} onChange={handleChange} />
             {errors.teamB && <p className="error">{errors.teamB}</p>}
           </div>
 
           <div className="form-group">
-            <label>Type *</label>
+            <label>Type <span className="required">*</span></label>
             <div className="radio-group">
               <label>
                 <input type="radio" name="type" value="Cricket" onChange={handleChange} /> Cricket
@@ -212,21 +259,22 @@ const CreateBat = () => {
           </div>
 
           <div className="form-group">
-            <label>Select Date & Time *</label>
+            <label>Select Date & Time <span className="required">*</span></label>
             <input type="datetime-local" name="dateTime" value={formData.dateTime} onChange={handleChange} />
             {errors.dateTime && <p className="error">{errors.dateTime}</p>}
           </div>
 
           <div className="form-group">
-            <label>Toss Rate *</label>
+            <label>Toss Rate <span className="required">*</span></label>
             <input type="number" autoComplete="off" name="tossRate" value={formData.tossRate} onChange={handleChange} />
             {errors.tossRate && <p className="error">{errors.tossRate}</p>}
           </div>
 
-          <div className="form-group full-width">
-            <label>Attach Image *</label>
+          <div className="form-group">
+            <label>Attach Image <span className="required">*</span></label>
             <input type="file" name="image" accept="image/*" onChange={handleChange} />
             {errors.image && <p className="error">{errors.image}</p>}
+            <label className="image-name-label">{imageName}</label>
           </div>
 
         </div>
@@ -237,9 +285,21 @@ const CreateBat = () => {
           Submit
         </button>
       </form>
+
+      <ToastContainer />
     </div>
   );
 }
+const convertToLocal = (dbTime) => {
+  const date = new Date(dbTime + "Z"); // treat as UTC
+  const offset = date.getTimezoneOffset() * 60000;
+
+  const local = new Date(date.getTime() - offset)
+    .toISOString()
+    .slice(0, 16);
+
+  return local;
+};
 
 
 export default CreateBat;

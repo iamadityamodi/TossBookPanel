@@ -1,88 +1,67 @@
-.wallet-container {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  font-family: "Segoe UI", sans-serif;
+.walletContainer{
+max-width:1000px;
+margin:auto;
+padding:15px;
+font-family:Arial;
 }
 
-.wallet-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+.walletHeader h2{
+margin-bottom:5px;
 }
 
-.wallet-header h2 {
-  margin: 0;
+.walletHeader p{
+color:#777;
+font-size:14px;
 }
 
-.wallet-header p {
-  margin: 4px 0 0;
-  color: #777;
-  font-size: 14px;
+.sortBtn{
+margin-top:10px;
+font-size:14px;
+cursor:alias;
 }
 
-.sort-btn {
-  background: none;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
+.transactionCard{
+background:white;
+border:1px solid #e6e6e6;
+border-radius:10px;
+padding:15px;
+margin-top:15px;
+box-shadow:0 1px 3px rgba(0,0,0,0.05);
 }
 
-.wallet-table {
-  width: 100%;
-  border-collapse: collapse;
+.cardTop{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
 }
 
-.wallet-table th {
-  text-align: left;
-  padding: 12px 8px;
-  border-bottom: 1px solid #eaeaea;
-  color: #777;
-  font-size: 14px;
+.desc{
+font-weight:500;
+width:75%;
 }
 
-.wallet-table td {
-  padding: 16px 8px;
-  border-bottom: 1px solid #f0f0f0;
-  vertical-align: top;
+.amount{
+font-weight:600;
 }
 
-.right {
-  text-align: right;
+.amount.credit{
+color:green;
 }
 
-.date {
-  font-weight: 600;
+.amount.debit{
+color:red;
 }
 
-.time {
-  font-size: 13px;
-  color: #888;
+.dateTime{
+font-size:13px;
+color:#777;
+margin-top:5px;
 }
 
-.desc-title {
-  font-weight: 600;
-}
-
-.desc-sub {
-  font-size: 13px;
-  color: #666;
-  margin-top: 4px;
-}
-
-.amount {
-  font-weight: 600;
-}
-
-.amount.debit {
-  color: #d60000;
-}
-
-.amount.credit {
-  color: #0a9b4a;
-}
-
-.balance {
-  font-weight: 600;
+.cardBottom{
+display:flex;
+justify-content:space-between;
+margin-top:10px;
+font-size:13px;
+color:#555;
 }
